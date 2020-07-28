@@ -1,17 +1,8 @@
 import { User, Post, Comment } from './types';
 
-const URL_USERS = 'https://mate.academy/students-api/users';
-const URL_POSTS = 'https://mate.academy/students-api/posts';
-const URL_COMMENTS = 'https://mate.academy/students-api/comments';
-
-interface ResponseData<D> {
-  data: D;
-  error?: string;
-}
-
-type UsersData = ResponseData<User[]>;
-type CommentsData = ResponseData<Comment[]>;
-type PostsData = ResponseData<Post[]>;
+const URL_USERS = 'https://mate-academy.github.io/react_dynamic-list-of-posts/api/users.json';
+const URL_POSTS = 'https://mate-academy.github.io/react_dynamic-list-of-posts/api/posts.json';
+const URL_COMMENTS = 'https://mate-academy.github.io/react_dynamic-list-of-posts/api/comments.json';
 
 function loadUsers(): Promise<User[]> {
   return fetch(URL_USERS)
@@ -22,7 +13,6 @@ function loadUsers(): Promise<User[]> {
 
       throw new Error(`Response of Users API not successful ${response.statusText}`);
     })
-    .then(({ data }: UsersData) => data)
     .catch(error => {
       // eslint-disable-next-line no-console
       console.error(error.message);
@@ -40,7 +30,6 @@ function loadComments(): Promise<Comment[]> {
 
       throw new Error(`Response of Comments API not successful ${response.statusText}`);
     })
-    .then(({ data }: CommentsData) => data)
     .catch(error => {
       // eslint-disable-next-line no-console
       console.error(error.message);
@@ -58,7 +47,6 @@ function loadPosts(): Promise<Post[]> {
 
       throw new Error(`Response of Posts API ot successful ${response.statusText}`);
     })
-    .then(({ data }: PostsData) => data)
     .catch(error => {
       // eslint-disable-next-line no-console
       console.error(error.message);

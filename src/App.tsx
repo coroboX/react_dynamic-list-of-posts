@@ -3,6 +3,8 @@ import './App.css';
 import Button from '@material-ui/core/Button';
 import { User, Post, Comment } from './types';
 
+import { loadData } from './api';
+
 interface State {
   setLoading: boolean;
   setLoaded: boolean;
@@ -30,6 +32,40 @@ const initState: State = {
 export class App extends React.Component<{}, State> {
   state = initState;
 
+  onLoading = (): void => {
+    this.setState((prevState) => ({
+      ...prevState,
+      setLoading: true,
+    }));
+
+    loadData()
+      .then(([users, posts, comments]) => {
+        this.setState((prevState: State) => ({
+          ...prevState,
+          setLoading: false,
+          setLoaded: true,
+          error: '',
+          gotError: false,
+          users,
+          comments,
+          posts,
+          preparedPosts: [],
+          filteredPosts: [],
+        }));
+
+        console.log(users);
+        console.log(posts);
+        console.log(comments);
+      })
+      .catch(error => {
+        this.setState(prevState => ({
+          ...prevState,
+          error: error.message,
+          gotError: true,
+        }));
+      });
+  };
+
   render() {
     const {
       setLoading,
@@ -40,22 +76,22 @@ export class App extends React.Component<{}, State> {
     } = this.state;
 
     return (
-    <>
-      <h1>Dynamic list of posts</h1>
-      {
-        (!setLoaded)
-          ? (
-            <>
-              <Button
-                variant="contained"
-                color="primary"
-                type="button"
-                // onClick={this.onLoading}
-                disabled={setLoading}
-              >
-                {setLoading ? 'Loading...' : 'Load'}
-              </Button>
-              {gotError === true
+      <>
+        <h1>Dynamic list of posts</h1>
+        {
+          (!setLoaded)
+            ? (
+              <>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  type="button"
+                  onClick={this.onLoading}
+                  disabled={setLoading}
+                >
+                  {setLoading ? 'Loading...' : 'Load'}
+                </Button>
+                {gotError === true
                 && (
                   <p>
                     {error}
@@ -64,22 +100,22 @@ export class App extends React.Component<{}, State> {
                       variant="outlined"
                       color="primary"
                       type="button"
-                      // onClick={this.onLoading}
+                      onClick={this.onLoading}
                     >
                       Retry Loading
                     </Button>
                   </p>
                 )}
-            </>
-          ) : (
-            <p>
-              Application will be here
-            </p>
-          )
-      }
-    </>
-      );
-  };
+              </>
+            ) : (
+              <p>
+                Application will be here
+              </p>
+            )
+        }
+      </>
+    );
+  }
 }
 
 export default App;
