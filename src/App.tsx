@@ -1,18 +1,19 @@
 import React from 'react';
 import './App.css';
 import Button from '@material-ui/core/Button';
-import { User, Post, Comment } from './types';
+import { UserType, PostType, CommentType } from './types';
 
 import { loadData } from './api';
+import { User } from './components/User';
 
 interface State {
   setLoading: boolean;
   setLoaded: boolean;
   gotError: boolean;
   error: string;
-  users: User[];
-  comments: Comment[];
-  posts: Post[];
+  users: UserType[];
+  comments: CommentType[];
+  posts: PostType[];
   preparedPosts: [];
   filteredPosts: [];
 }
@@ -70,7 +71,7 @@ export class App extends React.Component<{}, State> {
     const {
       setLoading,
       setLoaded,
-      // users,
+      users,
       gotError,
       error,
     } = this.state;
@@ -110,6 +111,16 @@ export class App extends React.Component<{}, State> {
             ) : (
               <p>
                 Application will be here
+                Debugging:
+                <ul>
+                  {users.map((user: UserType) => (
+                    <User
+                      name={user.name}
+                      email={user.email}
+                      address={user.address}
+                    />
+                  ))}
+                </ul>
               </p>
             )
         }

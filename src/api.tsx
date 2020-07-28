@@ -1,10 +1,10 @@
-import { User, Post, Comment } from './types';
+import { UserType, PostType, CommentType } from './types';
 
 const URL_USERS = 'https://mate-academy.github.io/react_dynamic-list-of-posts/api/users.json';
 const URL_POSTS = 'https://mate-academy.github.io/react_dynamic-list-of-posts/api/posts.json';
 const URL_COMMENTS = 'https://mate-academy.github.io/react_dynamic-list-of-posts/api/comments.json';
 
-function loadUsers(): Promise<User[]> {
+function loadUsers(): Promise<UserType[]> {
   return fetch(URL_USERS)
     .then(response => {
       if (response.ok) {
@@ -17,11 +17,11 @@ function loadUsers(): Promise<User[]> {
       // eslint-disable-next-line no-console
       console.error(error.message);
 
-      throw new Error('Failed to Fetch Users, press button again');
+      throw new Error('Failed to Fetch UsersType, press button again');
     });
 }
 
-function loadComments(): Promise<Comment[]> {
+function loadComments(): Promise<CommentType[]> {
   return fetch(URL_COMMENTS)
     .then(response => {
       if (response.ok) {
@@ -38,7 +38,7 @@ function loadComments(): Promise<Comment[]> {
     });
 }
 
-function loadPosts(): Promise<Post[]> {
+function loadPosts(): Promise<PostType[]> {
   return fetch(URL_POSTS)
     .then(response => {
       if (response.ok) {
@@ -55,7 +55,7 @@ function loadPosts(): Promise<Post[]> {
     });
 }
 
-export const loadData = async (): Promise<[User[], Post[], Comment[]]> => {
+export const loadData = async (): Promise<[UserType[], PostType[], CommentType[]]> => {
   const loadedData = await Promise.all([
     loadUsers(),
     loadPosts(),
