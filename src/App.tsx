@@ -1,10 +1,16 @@
 import React from 'react';
 import './App.css';
 import Button from '@material-ui/core/Button';
-import { UserType, PostType, CommentType } from './types';
+import {
+  PreparedPost,
+  PostType,
+  UserType,
+  CommentType,
+} from './types';
 
 import { loadData } from './api';
 import { User } from './components/User';
+import { Post } from './components/Post';
 
 interface State {
   setLoading: boolean;
@@ -14,7 +20,7 @@ interface State {
   users: UserType[];
   comments: CommentType[];
   posts: PostType[];
-  preparedPosts: [];
+  preparedPosts?: PreparedPost[];
   filteredPosts: [];
 }
 
@@ -41,8 +47,22 @@ export class App extends React.Component<{}, State> {
 
     loadData()
       .then(([users, posts, comments]) => {
-        this.setState((prevState: State) => ({
-          ...prevState,
+        const preparedPosts = [...posts].map((post) => {
+          const postUser = users
+            .find(user => (user.id === post.userId));
+          const postComments = comments
+            .filter(comment => (comment.postId === post.id));
+
+          return {
+            ...post,
+            postUser: {} && postUser,
+            postComments,
+          };
+        });
+
+
+
+        this.setState({
           setLoading: false,
           setLoaded: true,
           error: '',
@@ -50,9 +70,9 @@ export class App extends React.Component<{}, State> {
           users,
           comments,
           posts,
-          preparedPosts: [],
+          preparedPosts,
           filteredPosts: [],
-        }));
+        });
 
         console.log(users);
         console.log(posts);
@@ -72,6 +92,7 @@ export class App extends React.Component<{}, State> {
       setLoading,
       setLoaded,
       users,
+      preparedPosts,
       gotError,
       error,
     } = this.state;
@@ -115,10 +136,16 @@ export class App extends React.Component<{}, State> {
                 <ul>
                   {users.map((user: UserType) => (
                     <User
+                      key={user.id}
                       name={user.name}
                       email={user.email}
                       address={user.address}
                     />
+                  ))}
+                </ul>
+                <ul>
+                  {preparedPosts && preparedPosts.map((post: PreparedPost) => (
+                    <Post {...post} />
                   ))}
                 </ul>
               </p>

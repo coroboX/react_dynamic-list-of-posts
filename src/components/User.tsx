@@ -1,15 +1,9 @@
 import React from 'react';
 import { Alert, AlertTitle } from '@material-ui/lab';
+import { UserType } from '../types';
 
-interface Props {
-  name: string;
-  email: string;
-  address: {
-    street: string;
-    city: string;
-    zipcode: string;
-  };
-}
+type Props = Pick<UserType, 'name' | 'email' | 'address'>;
+
 export const User: React.FC<Props> = (props) => {
   const { name, email, address } = props;
   const { street, city, zipcode } = address;

@@ -1,3 +1,8 @@
+export interface PreparedPost extends PostType {
+  postUser: UserType;
+  postComments: CommentType[];
+}
+
 export interface PostType {
   userId: number;
   id: number;
